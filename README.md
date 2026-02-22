@@ -1,16 +1,70 @@
-# React + Vite
+# ✨ HabitTracker — Додаток для відстеження звичок
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Застосунок для саморозвитку, розроблений на React + Vite, який допомагає користувачам формувати корисні звички, відстежувати прогрес та переглядати історію своїх досягнень.
 
-Currently, two official plugins are available:
+## 🚀 Основні можливості
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Dashboard**: Керування звичками в реальному часі.
+- **Stats**: Панель статистики з метриками успішності та найкращими серіями (streaks).
+- **History**: Повний лог виконаних дій із часовими мітками.
+- **Persistence**: Автоматичне збереження даних у `localStorage`.
+- **Premium Design**: Сучасний інтерфейс із використанням CSS-змінних та адаптивною версткою.
 
-## React Compiler
+## 📂 Структура проєкту
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```text
+event_planner/
+├── src/
+│   ├── components/       # Компоненти інтерфейсу
+│   │   ├── Header.jsx       # Навігація та логотип
+│   │   ├── Stats.jsx        # Панель статистики
+│   │   ├── HabitList.jsx    # Контейнер списку звичок
+│   │   ├── HabitCard.jsx    # Картка окремої звички
+│   │   ├── AddHabitForm.jsx # Форма додавання нових звичок
+│   │   ├── History.jsx      # Журнал виконаних дій
+│   │   └── Footer.jsx       # Підвал сайту
+│   ├── styles/           # Стилі (Vanilla CSS)
+│   │   ├── variables.css    # Глобальні змінні (кольори, відступи)
+│   │   └── index.css        # Базові стилі та скидання
+│   ├── assets/           # Статичні ресурси (логотипи, зображення)
+│   ├── App.jsx           # Головна логіка та інтеграція компонентів
+│   └── main.jsx          # Точка входу в застосунок
+├── public/               # Публічні ресурси
+├── index.html            # Головний HTML файл
+├── package.json          # Залежності та скрипти
+└── vite.config.js        # Конфігурація Vite
+```
 
-## Expanding the ESLint configuration
+## 🛠️ Технологічний стек
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Core**: React 18
+- **Build Tool**: Vite
+- **Styling**: Vanilla CSS (CSS Variables, Flexbox, Grid)
+- **State Management**: React Hooks (useState, useEffect)
+- **Storage**: Browser LocalStorage
+
+## ⚙️ Встановлення та запуск
+
+1. Клонуйте репозиторій:
+   ```bash
+   git clone <repository-url>
+   ```
+
+2. Перейдіть у папку проєкту:
+   ```bash
+   cd event_planner
+   ```
+
+3. Встановіть залежності:
+   ```bash
+   npm install
+   ```
+
+4. Запустіть сервер розробки:
+   ```bash
+   npm run dev
+   ```
+
+## 📄 Ліцензія
+
+Проєкт розроблено в рамках навчального завдання.
