@@ -1,0 +1,8 @@
+@import './variables.css';
+
+/* Global styles can be added here */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
