@@ -1,7 +1,7 @@
 import React from 'react';
 import HabitCard from './HabitCard';
 
-const HabitList = ({ habits, onToggle, onDelete }) => {
+const HabitList = ({ habits }) => {
     if (habits.length === 0) {
         return (
             <div style={emptyStyles}>
@@ -13,12 +13,7 @@ const HabitList = ({ habits, onToggle, onDelete }) => {
     return (
         <div style={listStyles}>
             {habits.map((habit) => (
-                <HabitCard
-                    key={habit.id}
-                    habit={habit}
-                    onToggle={onToggle}
-                    onDelete={onDelete}
-                />
+                <HabitCard key={habit.id} habit={habit} />
             ))}
         </div>
     );

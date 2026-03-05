@@ -1,113 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HabitList from './components/HabitList';
-import AddHabitForm from './components/AddHabitForm';
 import Stats from './components/Stats';
 import History from './components/History';
 
+/* ── Static data source (const arrays) ── */
+
+const HABITS = [
+  { id: 1, name: 'Drink 2L Water', streak: 5, completed: true, category: 'Health' },
+  { id: 2, name: 'Morning Exercise', streak: 12, completed: false, category: 'Fitness' },
+  { id: 3, name: 'Read for 30 mins', streak: 3, completed: true, category: 'Learning' },
+  { id: 4, name: 'Meditate 10 mins', streak: 7, completed: true, category: 'Mindfulness' },
+  { id: 5, name: 'Practice English', streak: 0, completed: false, category: 'Learning' },
+  { id: 6, name: 'Walk 10 000 steps', streak: 21, completed: false, category: 'Fitness' },
+];
+
+const HISTORY_LOGS = [
+  { id: 101, habitName: 'Drink 2L Water', date: '04.03.2026', time: '08:30' },
+  { id: 102, habitName: 'Read for 30 mins', date: '04.03.2026', time: '09:15' },
+  { id: 103, habitName: 'Meditate 10 mins', date: '04.03.2026', time: '07:00' },
+  { id: 104, habitName: 'Morning Exercise', date: '03.03.2026', time: '06:45' },
+  { id: 105, habitName: 'Drink 2L Water', date: '03.03.2026', time: '08:00' },
+  { id: 106, habitName: 'Walk 10 000 steps', date: '02.03.2026', time: '18:30' },
+  { id: 107, habitName: 'Practice English', date: '02.03.2026', time: '20:00' },
+];
+
+/* ── Computed stats (derived from HABITS, no business logic in components) ── */
+
+const completedToday = HABITS.filter((h) => h.completed).length;
+const bestStreak = Math.max(...HABITS.map((h) => h.streak));
+
+const STATS = [
+  { id: 's1', label: 'Completed Today', value: `${completedToday} / ${HABITS.length}`, icon: '✅' },
+  { id: 's2', label: 'Best Streak', value: `${bestStreak} Days`, icon: '🔥' },
+  { id: 's3', label: 'Total Logged', value: `${HISTORY_LOGS.length}`, icon: '🏆' },
+  { id: 's4', label: 'Overall Progress', value: `${Math.round((completedToday / HABITS.length) * 100)}%`, icon: '📊' },
+];
+
+/* ── App component ── */
+
 function App() {
-  const [habits, setHabits] = useState(() => {
-    const saved = localStorage.getItem('habits');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, name: 'Drink 2L Water', streak: 5, completed: true },
-      { id: 2, name: 'Morning Exercise', streak: 12, completed: false },
-      { id: 3, name: 'Read for 30 mins', streak: 3, completed: true },
-    ];
-  });
-
-  const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem('habitHistory');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const [activeTab, setActiveTab] = useState('dashboard');
-
-  useEffect(() => {
-    localStorage.setItem('habits', JSON.stringify(habits));
-  }, [habits]);
-
-  useEffect(() => {
-    localStorage.setItem('habitHistory', JSON.stringify(history));
-  }, [history]);
-
-  const handleAddHabit = (name) => {
-    const newHabit = {
-      id: Date.now(),
-      name,
-      streak: 0,
-      completed: false,
-    };
-    setHabits([...habits, newHabit]);
-  };
-
-  const handleToggleHabit = (id) => {
-    setHabits(
-      habits.map((habit) => {
-        if (habit.id === id) {
-          const newCompletedStatus = !habit.completed;
-          if (newCompletedStatus) {
-            const logEntry = {
-              id: Date.now(),
-              habitName: habit.name,
-              date: new Date().toLocaleDateString(),
-              time: new Date().toLocaleTimeString(),
-            };
-            setHistory([logEntry, ...history].slice(0, 50));
-          }
-          return { ...habit, completed: newCompletedStatus, streak: newCompletedStatus ? habit.streak + 1 : habit.streak };
-        }
-        return habit;
-      })
-    );
-  };
-
-  const handleDeleteHabit = (id) => {
-    setHabits(habits.filter((habit) => habit.id !== id));
-  };
-
-  const completedToday = habits.filter((h) => h.completed).length;
-  const bestStreak = habits.length > 0 ? Math.max(...habits.map((h) => h.streak)) : 0;
-  const totalCompletedCount = history.length;
-
   return (
     <>
-      <Header activeTab={activeTab} onTabChange={setActiveTab} />
+      <Header title="Habit" titleAccent="Tracker" subtitle="Build better habits every day" />
 
       <main style={mainStyles}>
         <div style={contentContainer}>
-          {activeTab === 'dashboard' ? (
-            <>
-              <section style={sectionStyles}>
-                <h2 style={sectionTitle}>Your Progress</h2>
-                <Stats
-                  totalHabits={habits.length}
-                  completedToday={completedToday}
-                  bestStreak={bestStreak}
-                  totalCompletedCount={totalCompletedCount}
-                />
-              </section>
+          <section style={sectionStyles}>
+            <h2 style={sectionTitle}>Your Progress</h2>
+            <Stats stats={STATS} />
+          </section>
 
-              <section style={sectionStyles}>
-                <h2 style={sectionTitle}>Add New Habit</h2>
-                <AddHabitForm onAdd={handleAddHabit} />
-              </section>
+          <section style={sectionStyles}>
+            <h2 style={sectionTitle}>Daily Habits</h2>
+            <HabitList habits={HABITS} />
+          </section>
 
-              <section style={sectionStyles}>
-                <h2 style={sectionTitle}>Daily Habits</h2>
-                <HabitList
-                  habits={habits}
-                  onToggle={handleToggleHabit}
-                  onDelete={handleDeleteHabit}
-                />
-              </section>
-            </>
-          ) : (
-            <section style={sectionStyles}>
-              <h2 style={sectionTitle}>Completion History</h2>
-              <History logs={history} />
-            </section>
-          )}
+          <section style={sectionStyles}>
+            <h2 style={sectionTitle}>Completion History</h2>
+            <History logs={HISTORY_LOGS} />
+          </section>
         </div>
       </main>
 
@@ -115,6 +68,8 @@ function App() {
     </>
   );
 }
+
+/* ── Inline styles ── */
 
 const mainStyles = {
   flex: 1,
