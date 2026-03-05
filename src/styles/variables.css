@@ -6,8 +6,10 @@
   --bg-card: #1e293b;
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
-  --accent: #10b981; /* Success/Streak color */
+  --accent: #10b981;
+  /* Success/Streak color */
   --danger: #ef4444;
+  --warning: #eab308;
   --border: #334155;
 
   /* Typography */

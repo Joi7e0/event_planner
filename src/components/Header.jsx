@@ -1,37 +1,20 @@
 import React from 'react';
 import '../styles/variables.css';
 
-const Header = ({ activeTab, onTabChange }) => {
+const Header = ({ title, titleAccent, subtitle }) => {
     return (
         <header style={headerStyles}>
             <div style={containerStyles}>
-                <h1 style={logoStyles}>✨ Habit<span style={accentStyles}>Tracker</span></h1>
+                <div>
+                    <h1 style={logoStyles}>
+                        ✨ {title}<span style={accentStyles}>{titleAccent}</span>
+                    </h1>
+                    <p style={subtitleStyles}>{subtitle}</p>
+                </div>
                 <nav>
                     <ul style={navListStyles}>
-                        <li>
-                            <button
-                                onClick={() => onTabChange('dashboard')}
-                                style={{
-                                    ...navButtonStyle,
-                                    color: activeTab === 'dashboard' ? 'var(--primary)' : 'var(--text-secondary)',
-                                    borderBottom: activeTab === 'dashboard' ? '2px solid var(--primary)' : '2px solid transparent',
-                                }}
-                            >
-                                Dashboard
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                onClick={() => onTabChange('history')}
-                                style={{
-                                    ...navButtonStyle,
-                                    color: activeTab === 'history' ? 'var(--primary)' : 'var(--text-secondary)',
-                                    borderBottom: activeTab === 'history' ? '2px solid var(--primary)' : '2px solid transparent',
-                                }}
-                            >
-                                History
-                            </button>
-                        </li>
+                        <li style={navItemStyle}>Dashboard</li>
+                        <li style={navItemStyle}>History</li>
                     </ul>
                 </nav>
             </div>
@@ -65,21 +48,25 @@ const accentStyles = {
     color: 'var(--primary)',
 };
 
+const subtitleStyles = {
+    fontSize: '0.85rem',
+    color: 'var(--text-secondary)',
+    marginTop: '2px',
+};
+
 const navListStyles = {
     display: 'flex',
     listStyle: 'none',
     gap: 'var(--spacing-lg)',
 };
 
-const navButtonStyle = {
-    background: 'none',
-    border: 'none',
-    padding: 'var(--spacing-sm) 0',
-    cursor: 'pointer',
+const navItemStyle = {
+    color: 'var(--text-secondary)',
     fontSize: '0.9rem',
     fontWeight: '600',
-    transition: 'var(--transition)',
-    outline: 'none',
+    padding: 'var(--spacing-sm) 0',
+    borderBottom: '2px solid transparent',
+    cursor: 'default',
 };
 
 export default Header;
