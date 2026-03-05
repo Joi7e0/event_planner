@@ -1,17 +1,38 @@
 import React from 'react';
 
-const Footer = () => {
+const Footer = ({ stats }) => {
+    const isReadyForRest = stats?.completed === stats?.total && stats?.total > 0;
+
     return (
         <footer style={footerStyles}>
             <div style={containerStyles}>
-                <p style={textStyles}>&copy; 2026 HabitTracker. Built with ✨ for a better you.</p>
+                <div style={statsContainer}>
+                    <p style={textStyles}>
+                        &copy; 2026 HabitTracker Premium.
+                        {stats && (
+                            <span style={{
+                                marginLeft: '12px',
+                                color: isReadyForRest ? 'var(--accent)' : 'var(--text-secondary)',
+                                fontWeight: isReadyForRest ? '700' : '400'
+                            }}>
+                                {isReadyForRest
+                                    ? "🎉 Day completed! You're crushing it!"
+                                    : `📈 Progress: ${stats.completed}/${stats.total} habits done.`}
+                            </span>
+                        )}
+                    </p>
+                </div>
                 <div style={linksStyles}>
-                    <a href="#" style={linkStyles}>Privacy</a>
-                    <a href="#" style={linkStyles}>Terms</a>
+                    <span style={linkStyles}>Privacy</span>
+                    <span style={linkStyles}>Terms</span>
                 </div>
             </div>
         </footer>
     );
+};
+
+const statsContainer = {
+    flex: '1',
 };
 
 const footerStyles = {

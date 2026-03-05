@@ -1,12 +1,25 @@
 import React from 'react';
 
-const HabitCard = ({ habit }) => {
+const HabitCard = ({ habit, onToggle }) => {
     const isDone = habit.completed;
 
     return (
-        <div style={cardStyles}>
+        <div
+            style={{
+                ...cardStyles,
+                opacity: isDone ? 0.8 : 1,
+                borderLeft: isDone ? '4px solid var(--accent)' : '4px solid var(--warning)',
+            }}
+            onClick={() => onToggle(habit.id)}
+        >
             <div style={infoStyles}>
-                <h3 style={titleStyles}>{habit.name}</h3>
+                <h3 style={{
+                    ...titleStyles,
+                    textDecoration: isDone ? 'line-through' : 'none',
+                    color: isDone ? 'var(--text-secondary)' : 'var(--text-primary)',
+                }}>
+                    {habit.name}
+                </h3>
                 <div style={metaRow}>
                     <span style={categoryBadge}>{habit.category}</span>
                     <span style={streakStyles}>🔥 {habit.streak} day streak</span>
@@ -36,6 +49,8 @@ const cardStyles = {
     marginBottom: 'var(--spacing-md)',
     transition: 'var(--transition)',
     boxShadow: 'var(--shadow)',
+    cursor: 'pointer',
+    userSelect: 'none',
 };
 
 const infoStyles = {
@@ -73,11 +88,13 @@ const streakStyles = {
 };
 
 const statusBadge = {
-    padding: '4px 14px',
-    borderRadius: '12px',
+    padding: '6px 16px',
+    borderRadius: '20px',
     fontSize: '0.8rem',
     fontWeight: '700',
     whiteSpace: 'nowrap',
+    minWidth: '100px',
+    textAlign: 'center',
 };
 
 export default HabitCard;
