@@ -33,6 +33,7 @@ function App() {
   const [habits, setHabits] = useState(INITIAL_HABITS);
   const [historyLogs] = useState(INITIAL_HISTORY_LOGS);
   const [currentView, setCurrentView] = useState('dashboard');
+  const [filterMode, setFilterMode] = useState('all'); // 'all', 'active', 'completed'
 
   const toggleHabit = (id) => {
     setHabits((prevHabits) =>
@@ -58,6 +59,13 @@ function App() {
     { id: 's3', label: 'Total Logged', value: `${historyLogs.length}`, icon: '🏆' },
     { id: 's4', label: 'Overall Progress', value: `${totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0}%`, icon: '📊' },
   ];
+
+  /* ── Filtered data ── */
+  const filteredHabits = habits.filter((habit) => {
+    if (filterMode === 'active') return !habit.completed;
+    if (filterMode === 'completed') return habit.completed;
+    return true; // 'all'
+  });
 
   return (
     <>
@@ -85,8 +93,30 @@ function App() {
               </section>
 
               <section style={sectionStyles}>
-                <h2 style={sectionTitle}>Daily Habits</h2>
-                <HabitList habits={habits} onToggle={toggleHabit} />
+                <div style={filterHeaderStyles}>
+                  <h2 style={{ ...sectionTitle, margin: 0, borderLeft: 'none', paddingLeft: 0 }}>Daily Habits</h2>
+                  <div style={filterGroupStyles}>
+                    <button
+                      style={{ ...filterBtnStyles, ...(filterMode === 'all' ? activeFilterStyles : {}) }}
+                      onClick={() => setFilterMode('all')}
+                    >
+                      All
+                    </button>
+                    <button
+                      style={{ ...filterBtnStyles, ...(filterMode === 'active' ? activeFilterStyles : {}) }}
+                      onClick={() => setFilterMode('active')}
+                    >
+                      Active
+                    </button>
+                    <button
+                      style={{ ...filterBtnStyles, ...(filterMode === 'completed' ? activeFilterStyles : {}) }}
+                      onClick={() => setFilterMode('completed')}
+                    >
+                      Completed
+                    </button>
+                  </div>
+                </div>
+                <HabitList habits={filteredHabits} onToggle={toggleHabit} />
               </section>
             </>
           ) : (
@@ -128,6 +158,42 @@ const sectionTitle = {
   marginBottom: 'var(--spacing-md)',
   borderLeft: '4px solid var(--primary)',
   paddingLeft: 'var(--spacing-md)',
+};
+
+const filterHeaderStyles = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 'var(--spacing-md)',
+  paddingBottom: 'var(--spacing-sm)',
+  borderBottom: '1px solid var(--border)',
+};
+
+const filterGroupStyles = {
+  display: 'flex',
+  gap: '8px',
+  backgroundColor: 'var(--bg-card)',
+  padding: '4px',
+  borderRadius: 'var(--radius)',
+  border: '1px solid var(--border)',
+};
+
+const filterBtnStyles = {
+  background: 'transparent',
+  border: 'none',
+  padding: '6px 12px',
+  fontSize: '0.85rem',
+  fontWeight: '600',
+  color: 'var(--text-secondary)',
+  cursor: 'pointer',
+  borderRadius: 'var(--radius)',
+  transition: 'all 0.2s',
+};
+
+const activeFilterStyles = {
+  backgroundColor: 'var(--primary)',
+  color: 'white',
+  boxShadow: 'var(--shadow)',
 };
 
 export default App;
