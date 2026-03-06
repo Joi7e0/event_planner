@@ -37,7 +37,6 @@ event_planner/
 ├── package.json             # Залежності та скрипти
 ├── vite.config.js           # Конфігурація Vite
 ├── eslint.config.js         # Конфігурація ESLint
-└── report_lab2.txt          # Звіт до лабораторної роботи №2
 ```
 
 ## 🛠️ Технологічний стек

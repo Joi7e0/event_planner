@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/variables.css';
 
-const Header = ({ title, titleAccent, subtitle, completedCount, currentView, onViewChange }) => {
+const Header = ({ title, titleAccent, subtitle, completedCount, currentView, onViewChange, theme, toggleTheme }) => {
     return (
         <header style={headerStyles}>
             <div style={containerStyles}>
@@ -40,6 +40,9 @@ const Header = ({ title, titleAccent, subtitle, completedCount, currentView, onV
                             </li>
                         </ul>
                     </nav>
+                    <button onClick={toggleTheme} style={themeToggleStyle} aria-label="Toggle Theme">
+                        {theme === 'light' ? '🌙' : '☀️'}
+                    </button>
                 </div>
             </div>
         </header>
@@ -121,6 +124,20 @@ const navItemStyle = {
     borderBottom: '2px solid transparent',
     cursor: 'pointer',
     transition: 'var(--transition)',
+};
+
+const themeToggleStyle = {
+    background: 'none',
+    border: 'none',
+    fontSize: '1.2rem',
+    cursor: 'pointer',
+    padding: '4px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'var(--transition)',
+    color: 'var(--text-primary)',
 };
 
 export default Header;

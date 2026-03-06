@@ -26,6 +26,19 @@
   --transition: all 0.3s ease;
 }
 
+[data-theme='light'] {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent: #059669;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --border: #e2e8f0;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

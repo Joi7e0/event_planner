@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HabitList from './components/HabitList';
@@ -30,10 +30,50 @@ const INITIAL_HISTORY_LOGS = [
 /* ── App component ── */
 
 function App() {
-  const [habits, setHabits] = useState(INITIAL_HABITS);
-  const [historyLogs] = useState(INITIAL_HISTORY_LOGS);
+  const [habits, setHabits] = useState(() => {
+    const savedHabits = localStorage.getItem('habits-data');
+    if (savedHabits) {
+      try {
+        return JSON.parse(savedHabits);
+      } catch (error) {
+        console.error('Failed to parse habits data', error);
+      }
+    }
+    return INITIAL_HABITS;
+  });
+  const [historyLogs, setHistoryLogs] = useState(() => {
+    const savedHistoryLogs = localStorage.getItem('history-logs-data');
+    if (savedHistoryLogs) {
+      try {
+        return JSON.parse(savedHistoryLogs);
+      } catch (error) {
+        console.error('Failed to parse history logs data', error);
+      }
+    }
+    return INITIAL_HISTORY_LOGS;
+  });
   const [currentView, setCurrentView] = useState('dashboard');
   const [filterMode, setFilterMode] = useState('all'); // 'all', 'active', 'completed'
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme-preference') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme-preference', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  useEffect(() => {
+    localStorage.setItem('habits-data', JSON.stringify(habits));
+  }, [habits]);
+
+  useEffect(() => {
+    localStorage.setItem('history-logs-data', JSON.stringify(historyLogs));
+  }, [historyLogs]);
 
   const toggleHabit = (id) => {
     setHabits((prevHabits) =>
@@ -76,6 +116,8 @@ function App() {
         completedCount={completedToday}
         currentView={currentView}
         onViewChange={setCurrentView}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
 
       <main style={mainStyles}>
