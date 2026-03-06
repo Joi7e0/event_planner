@@ -67,7 +67,7 @@ event_planner/
 
 4. Запустіть сервер розробки:
    ```bash
-   npm run dev
+   npm.cmd run dev
    ```
 
 ## 📄 Ліцензія
