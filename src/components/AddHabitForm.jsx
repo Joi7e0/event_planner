@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const AddHabitForm = ({ onAdd }) => {
     const [name, setName] = useState('');
     const [category, setCategory] = useState('Health');
+    const inputRef = useRef(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,12 +17,15 @@ const AddHabitForm = ({ onAdd }) => {
         });
 
         setName('');
+        setCategory('Health');
+        inputRef.current?.focus();
     };
 
     return (
         <form onSubmit={handleSubmit} style={formStyles}>
             <div style={inputGroup}>
                 <input
+                    ref={inputRef}
                     type="text"
                     placeholder="E.g. Drink Water, Exercise..."
                     value={name}
