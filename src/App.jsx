@@ -5,6 +5,7 @@ import HabitList from './components/HabitList';
 import Stats from './components/Stats';
 import History from './components/History';
 import AddHabitForm from './components/AddHabitForm';
+import ApiHabits from './components/ApiHabits';
 
 /* ── Initial data ── */
 
@@ -161,6 +162,11 @@ function App() {
                 <HabitList habits={filteredHabits} onToggle={toggleHabit} />
               </section>
             </>
+          ) : currentView === 'api' ? (
+            <section style={sectionStyles}>
+              <h2 style={sectionTitle}>API Data — Todos</h2>
+              <ApiHabits />
+            </section>
           ) : (
             <section style={sectionStyles}>
               <h2 style={sectionTitle}>Completion History</h2>

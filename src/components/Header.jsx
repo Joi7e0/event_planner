@@ -38,6 +38,16 @@ const Header = ({ title, titleAccent, subtitle, completedCount, currentView, onV
                             >
                                 History
                             </li>
+                            <li
+                                style={{
+                                    ...navItemStyle,
+                                    color: currentView === 'api' ? 'var(--primary)' : 'var(--text-secondary)',
+                                    borderBottom: currentView === 'api' ? '2px solid var(--primary)' : '2px solid transparent',
+                                }}
+                                onClick={() => onViewChange('api')}
+                            >
+                                API Data
+                            </li>
                         </ul>
                     </nav>
                     <button onClick={toggleTheme} style={themeToggleStyle} aria-label="Toggle Theme">
