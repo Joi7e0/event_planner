@@ -7,18 +7,29 @@
   flex-direction: column;
 }
 
-/* ApiHabits component animations */
-@keyframes apiHabitsSpin {
-  to {
-    transform: rotate(360deg);
-  }
+/* Navigation Links */
+.nav-item {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
 }
 
-@keyframes apiHabitsShimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+.nav-item:hover {
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+}
+
+/* Spinner animation used by ApiHabits */
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

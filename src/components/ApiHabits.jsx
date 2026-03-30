@@ -1,339 +1,171 @@
 import React, { useState, useEffect } from 'react';
 
-/**
- * ApiHabits – компонент для відображення даних з API.
- * Реалізує три стани інтерфейсу: loading, error, success.
- * Використовує fetch + useEffect з порожнім масивом залежностей [].
- * Обробка помилок – try/catch та перевірка response.ok.
- */
+/* ── ApiHabits ──────────────────────────────────────────────────────────────
+   Fetches motivational quotes from Quotable API and renders them as
+   inspiration cards. Implements three UI states: loading / error / success.
+   ─────────────────────────────────────────────────────────────────────────── */
 
-const API_URL = 'https://jsonplaceholder.typicode.com/invalid-endpoint-404';
+const API_URL = 'https://dummyjson.com/quotes?limit=6';
 
 const ApiHabits = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [quotes, setQuotes]   = useState([]);
+  const [status, setStatus]   = useState('loading'); // 'loading' | 'error' | 'success'
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchQuotes = async () => {
+      setStatus('loading');
       try {
         const response = await fetch(API_URL);
-
         if (!response.ok) {
-          throw new Error(`HTTP помилка! Статус: ${response.status}`);
+          throw new Error(`Server responded with status ${response.status}`);
         }
-
-        const result = await response.json();
-        setData(result);
+        const data = await response.json();
+        setQuotes(data.quotes || []);
+        setStatus('success');
       } catch (err) {
-        setError(err.message || 'Невідома помилка при завантаженні даних');
-      } finally {
-        setLoading(false);
+        setErrorMsg(err.message || 'Failed to load quotes.');
+        setStatus('error');
       }
     };
 
-    fetchData();
-  }, []);
+    fetchQuotes();
+  }, []); // empty deps → runs once on mount
 
   /* ── Loading state ── */
-  if (loading) {
+  if (status === 'loading') {
     return (
-      <div style={wrapperStyles}>
-        <div style={loadingContainer}>
-          <div style={spinnerStyles} />
-          <p style={loadingText}>Завантаження даних...</p>
-          <div style={shimmerRow}>
-            {[1, 2, 3].map((i) => (
-              <div key={i} style={shimmerCard} />
-            ))}
-          </div>
-        </div>
+      <div style={stateWrapperStyles}>
+        <div style={spinnerStyles} aria-label="Loading quotes" />
+        <p style={stateTextStyles}>Fetching inspiration…</p>
       </div>
     );
   }
 
   /* ── Error state ── */
-  if (error) {
+  if (status === 'error') {
     return (
-      <div style={wrapperStyles}>
-        <div style={errorContainer}>
-          <span style={errorIcon}>⚠️</span>
-          <h3 style={errorTitle}>Помилка завантаження</h3>
-          <p style={errorMessage}>{error}</p>
-          <button
-            style={retryButton}
-            onClick={() => window.location.reload()}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--primary-hover)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--primary)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            🔄 Спробувати знову
-          </button>
-        </div>
+      <div style={{ ...stateWrapperStyles, ...errorWrapperStyles }}>
+        <span style={errorIconStyles}>⚠️</span>
+        <p style={{ ...stateTextStyles, color: 'var(--warning)' }}>
+          Could not load quotes
+        </p>
+        <p style={errorDetailStyles}>{errorMsg}</p>
       </div>
     );
   }
 
   /* ── Success state ── */
   return (
-    <div style={wrapperStyles}>
-      <div style={headerRow}>
-        <p style={countBadge}>
-          <span style={countNumber}>{data.length}</span> завдань отримано
-        </p>
-        <div style={legendRow}>
-          <span style={{ ...legendDot, backgroundColor: 'var(--accent)' }} />
-          <span style={legendLabel}>Виконано</span>
-          <span style={{ ...legendDot, backgroundColor: 'var(--warning)' }} />
-          <span style={legendLabel}>В процесі</span>
-        </div>
-      </div>
-
-      <div style={gridStyles}>
-        {data.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              ...cardStyles,
-              borderLeft: item.completed
-                ? '4px solid var(--accent)'
-                : '4px solid var(--warning)',
-            }}
-          >
-            <div style={cardHeader}>
-              <span style={cardId}>#{item.id}</span>
-              <span
-                style={{
-                  ...statusBadge,
-                  backgroundColor: item.completed
-                    ? 'rgba(16, 185, 129, 0.15)'
-                    : 'rgba(234, 179, 8, 0.15)',
-                  color: item.completed ? 'var(--accent)' : 'var(--warning)',
-                }}
-              >
-                {item.completed ? '✓ Done' : '⏳ Pending'}
-              </span>
-            </div>
-            <p
-              style={{
-                ...cardTitle,
-                textDecoration: item.completed ? 'line-through' : 'none',
-                opacity: item.completed ? 0.7 : 1,
-              }}
-            >
-              {item.title}
-            </p>
-            <div style={cardFooter}>
-              <span style={userBadge}>👤 User {item.userId}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div style={gridStyles}>
+      {quotes.map((quote) => (
+        <article key={quote.id} style={cardStyles}>
+          <span style={quoteMarkStyles}>&ldquo;</span>
+          <p style={quoteTextStyles}>{quote.quote}</p>
+          <footer style={quoteFooterStyles}>
+            <span style={authorBadgeStyles}>— {quote.author}</span>
+          </footer>
+        </article>
+      ))}
     </div>
   );
 };
 
-/* ══════════════════════════════════════════
-   Inline Styles
-   ══════════════════════════════════════════ */
+/* ── Styles ──────────────────────────────────────────────────────────────── */
 
-const wrapperStyles = {
-  width: '100%',
-};
-
-/* ── Loading ── */
-const loadingContainer = {
+const stateWrapperStyles = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: 'var(--spacing-md)',
-  padding: '48px 0',
+  justifyContent: 'center',
+  minHeight: '180px',
+  gap: '12px',
+};
+
+const errorWrapperStyles = {
+  backgroundColor: 'rgba(234, 179, 8, 0.08)',
+  borderRadius: 'var(--radius)',
+  border: '1px solid rgba(234, 179, 8, 0.25)',
+  padding: '24px',
 };
 
 const spinnerStyles = {
-  width: '42px',
-  height: '42px',
-  border: '4px solid var(--border)',
-  borderTopColor: 'var(--primary)',
+  width: '40px',
+  height: '40px',
+  border: '3px solid var(--border)',
+  borderTop: '3px solid var(--primary)',
   borderRadius: '50%',
-  animation: 'apiHabitsSpin 0.8s linear infinite',
+  animation: 'spin 0.8s linear infinite',
 };
 
-const loadingText = {
+const stateTextStyles = {
   fontSize: '1rem',
-  fontWeight: '600',
   color: 'var(--text-secondary)',
-  letterSpacing: '0.02em',
+  margin: 0,
 };
 
-const shimmerRow = {
-  display: 'flex',
-  gap: 'var(--spacing-md)',
-  width: '100%',
-  maxWidth: '600px',
+const errorIconStyles = {
+  fontSize: '2rem',
 };
 
-const shimmerCard = {
-  flex: 1,
-  height: '80px',
-  borderRadius: 'var(--radius)',
-  background:
-    'linear-gradient(110deg, var(--bg-card) 30%, var(--border) 50%, var(--bg-card) 70%)',
-  backgroundSize: '200% 100%',
-  animation: 'apiHabitsShimmer 1.5s ease-in-out infinite',
-};
-
-/* ── Error ── */
-const errorContainer = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: 'var(--spacing-md)',
-  padding: '48px var(--spacing-lg)',
-  backgroundColor: 'var(--bg-card)',
-  borderRadius: 'var(--radius)',
-  border: '1px solid var(--danger)',
-  boxShadow: '0 0 20px rgba(239, 68, 68, 0.08)',
-  textAlign: 'center',
-};
-
-const errorIcon = {
-  fontSize: '2.5rem',
-};
-
-const errorTitle = {
-  fontSize: '1.2rem',
-  fontWeight: '700',
-  color: 'var(--danger)',
-};
-
-const errorMessage = {
-  fontSize: '0.9rem',
+const errorDetailStyles = {
+  fontSize: '0.8rem',
   color: 'var(--text-secondary)',
-  maxWidth: '400px',
-  lineHeight: '1.6',
-};
-
-const retryButton = {
-  padding: '10px 24px',
-  fontSize: '0.9rem',
-  fontWeight: '700',
-  color: '#fff',
-  backgroundColor: 'var(--primary)',
-  border: 'none',
-  borderRadius: 'var(--radius)',
-  cursor: 'pointer',
-  transition: 'all 0.25s ease',
-  boxShadow: 'var(--shadow)',
-};
-
-/* ── Success ── */
-const headerRow = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 'var(--spacing-md)',
-  flexWrap: 'wrap',
-  gap: 'var(--spacing-sm)',
-};
-
-const countBadge = {
-  fontSize: '0.9rem',
-  color: 'var(--text-secondary)',
-  fontWeight: '500',
-};
-
-const countNumber = {
-  fontWeight: '800',
-  color: 'var(--primary)',
-  fontSize: '1.1rem',
-};
-
-const legendRow = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '6px',
-};
-
-const legendDot = {
-  width: '8px',
-  height: '8px',
-  borderRadius: '50%',
-  display: 'inline-block',
-};
-
-const legendLabel = {
-  fontSize: '0.75rem',
-  color: 'var(--text-secondary)',
-  marginRight: '10px',
+  margin: 0,
+  fontFamily: 'monospace',
 };
 
 const gridStyles = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
   gap: 'var(--spacing-md)',
 };
 
 const cardStyles = {
   backgroundColor: 'var(--bg-card)',
-  padding: 'var(--spacing-md)',
-  borderRadius: 'var(--radius)',
   border: '1px solid var(--border)',
+  borderLeft: '4px solid var(--primary)',
+  borderRadius: 'var(--radius)',
+  padding: 'var(--spacing-md)',
   boxShadow: 'var(--shadow)',
-  transition: 'all 0.25s ease',
   display: 'flex',
   flexDirection: 'column',
   gap: '10px',
+  transition: 'var(--transition)',
+  position: 'relative',
 };
 
-const cardHeader = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-};
-
-const cardId = {
-  fontSize: '0.75rem',
-  fontWeight: '700',
+const quoteMarkStyles = {
+  fontSize: '3rem',
+  lineHeight: 1,
   color: 'var(--primary)',
-  backgroundColor: 'rgba(99, 102, 241, 0.1)',
-  padding: '2px 10px',
-  borderRadius: '10px',
+  opacity: 0.25,
+  fontFamily: 'Georgia, serif',
+  position: 'absolute',
+  top: '8px',
+  left: '14px',
+  userSelect: 'none',
 };
 
-const statusBadge = {
-  padding: '4px 14px',
-  borderRadius: '20px',
-  fontSize: '0.75rem',
-  fontWeight: '700',
-  whiteSpace: 'nowrap',
-};
-
-const cardTitle = {
-  fontSize: '0.95rem',
-  fontWeight: '600',
+const quoteTextStyles = {
+  fontSize: '0.92rem',
+  lineHeight: 1.6,
   color: 'var(--text-primary)',
-  lineHeight: '1.4',
-  textTransform: 'capitalize',
+  margin: '20px 0 0 0',
+  fontStyle: 'italic',
 };
 
-const cardFooter = {
-  display: 'flex',
-  justifyContent: 'flex-end',
+const quoteFooterStyles = {
+  marginTop: 'auto',
+  paddingTop: '8px',
+  borderTop: '1px solid var(--border)',
 };
 
-const userBadge = {
-  fontSize: '0.7rem',
+const authorBadgeStyles = {
+  fontSize: '0.78rem',
   fontWeight: '600',
-  color: 'var(--text-secondary)',
-  backgroundColor: 'var(--bg-main)',
-  padding: '3px 10px',
-  borderRadius: '8px',
+  color: 'var(--primary)',
+  letterSpacing: '0.02em',
 };
 
 export default ApiHabits;

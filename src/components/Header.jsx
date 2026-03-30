@@ -1,7 +1,8 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import '../styles/variables.css';
 
-const Header = ({ title, titleAccent, subtitle, completedCount, currentView, onViewChange, theme, toggleTheme }) => {
+const Header = ({ title, titleAccent, subtitle, completedCount, theme, toggleTheme }) => {
     return (
         <header style={headerStyles}>
             <div style={containerStyles}>
@@ -17,36 +18,26 @@ const Header = ({ title, titleAccent, subtitle, completedCount, currentView, onV
                         <span style={badgeValue}>{completedCount} Done</span>
                     </div>
                     <nav>
-                        <ul style={navListStyles}>
-                            <li
-                                style={{
-                                    ...navItemStyle,
-                                    color: currentView === 'dashboard' ? 'var(--primary)' : 'var(--text-secondary)',
-                                    borderBottom: currentView === 'dashboard' ? '2px solid var(--primary)' : '2px solid transparent',
-                                }}
-                                onClick={() => onViewChange('dashboard')}
-                            >
-                                Dashboard
+                        <ul className="nav-list" style={navListStyles}>
+                            <li>
+                                <NavLink to="/" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+                                    Dashboard
+                                </NavLink>
                             </li>
-                            <li
-                                style={{
-                                    ...navItemStyle,
-                                    color: currentView === 'history' ? 'var(--primary)' : 'var(--text-secondary)',
-                                    borderBottom: currentView === 'history' ? '2px solid var(--primary)' : '2px solid transparent',
-                                }}
-                                onClick={() => onViewChange('history')}
-                            >
-                                History
+                            <li>
+                                <NavLink to="/habits" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+                                    Habits
+                                </NavLink>
                             </li>
-                            <li
-                                style={{
-                                    ...navItemStyle,
-                                    color: currentView === 'api' ? 'var(--primary)' : 'var(--text-secondary)',
-                                    borderBottom: currentView === 'api' ? '2px solid var(--primary)' : '2px solid transparent',
-                                }}
-                                onClick={() => onViewChange('api')}
-                            >
-                                API Data
+                            <li>
+                                <NavLink to="/history" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+                                    History
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/about" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+                                    ✨ Inspiration
+                                </NavLink>
                             </li>
                         </ul>
                     </nav>
@@ -124,16 +115,8 @@ const navListStyles = {
     display: 'flex',
     listStyle: 'none',
     gap: 'var(--spacing-lg)',
-};
-
-const navItemStyle = {
-    color: 'var(--text-secondary)',
-    fontSize: '0.9rem',
-    fontWeight: '600',
-    padding: 'var(--spacing-sm) 0',
-    borderBottom: '2px solid transparent',
-    cursor: 'pointer',
-    transition: 'var(--transition)',
+    margin: 0,
+    padding: 0,
 };
 
 const themeToggleStyle = {
@@ -151,3 +134,4 @@ const themeToggleStyle = {
 };
 
 export default Header;
+

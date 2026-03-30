@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import HabitList from './components/HabitList';
-import Stats from './components/Stats';
-import History from './components/History';
-import AddHabitForm from './components/AddHabitForm';
-import ApiHabits from './components/ApiHabits';
+import { Routes, Route, Navigate } from 'react-router-dom';
+
+// Layout
+import Layout from './components/Layout';
+
+// Pages
+import Dashboard from './pages/Dashboard';
+import HabitsPage from './pages/HabitsPage';
+import HistoryPage from './pages/HistoryPage';
+import AboutPage from './pages/AboutPage';
+import HabitDetail from './pages/HabitDetail';
+import NotFound from './pages/NotFound';
 
 /* ── Initial data ── */
 
@@ -42,7 +47,7 @@ function App() {
     }
     return INITIAL_HABITS;
   });
-  const [historyLogs, setHistoryLogs] = useState(() => {
+  const [historyLogs] = useState(() => {
     const savedHistoryLogs = localStorage.getItem('history-logs-data');
     if (savedHistoryLogs) {
       try {
@@ -53,7 +58,6 @@ function App() {
     }
     return INITIAL_HISTORY_LOGS;
   });
-  const [currentView, setCurrentView] = useState('dashboard');
   const [filterMode, setFilterMode] = useState('all'); // 'all', 'active', 'completed'
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme-preference') || 'dark';
@@ -109,139 +113,40 @@ function App() {
   });
 
   return (
-    <>
-      <Header
-        title="Habit"
-        titleAccent="Tracker"
-        subtitle="Build better habits every day"
-        completedCount={completedToday}
-        currentView={currentView}
-        onViewChange={setCurrentView}
-        theme={theme}
-        toggleTheme={toggleTheme}
-      />
+    <Routes>
+      <Route element={
+        <Layout 
+          theme={theme} 
+          toggleTheme={toggleTheme} 
+          completedToday={completedToday} 
+          totalHabits={totalHabits} 
+        />
+      }>
+        <Route path="/" element={<Dashboard statsData={statsData} historyLogs={historyLogs} />} />
+        
+        <Route path="/habits" element={
+          <HabitsPage 
+            filterMode={filterMode} 
+            setFilterMode={setFilterMode} 
+            filteredHabits={filteredHabits} 
+            addHabit={addHabit} 
+            toggleHabit={toggleHabit} 
+          />
+        } />
+        
+        <Route path="/habit/:id" element={<HabitDetail habits={habits} />} />
+        
+        <Route path="/history" element={<HistoryPage historyLogs={historyLogs} />} />
+        
+        <Route path="/about" element={<AboutPage />} />
 
-      <main style={mainStyles}>
-        <div style={contentContainer}>
-          {currentView === 'dashboard' ? (
-            <>
-              <section style={sectionStyles}>
-                <h2 style={sectionTitle}>Your Progress</h2>
-                <Stats stats={statsData} />
-              </section>
-
-              <section style={sectionStyles}>
-                <h2 style={sectionTitle}>Add New Habit</h2>
-                <AddHabitForm onAdd={addHabit} />
-              </section>
-
-              <section style={sectionStyles}>
-                <div style={filterHeaderStyles}>
-                  <h2 style={{ ...sectionTitle, margin: 0, borderLeft: 'none', paddingLeft: 0 }}>Daily Habits</h2>
-                  <div style={filterGroupStyles}>
-                    <button
-                      style={{ ...filterBtnStyles, ...(filterMode === 'all' ? activeFilterStyles : {}) }}
-                      onClick={() => setFilterMode('all')}
-                    >
-                      All
-                    </button>
-                    <button
-                      style={{ ...filterBtnStyles, ...(filterMode === 'active' ? activeFilterStyles : {}) }}
-                      onClick={() => setFilterMode('active')}
-                    >
-                      Active
-                    </button>
-                    <button
-                      style={{ ...filterBtnStyles, ...(filterMode === 'completed' ? activeFilterStyles : {}) }}
-                      onClick={() => setFilterMode('completed')}
-                    >
-                      Completed
-                    </button>
-                  </div>
-                </div>
-                <HabitList habits={filteredHabits} onToggle={toggleHabit} />
-              </section>
-            </>
-          ) : currentView === 'api' ? (
-            <section style={sectionStyles}>
-              <h2 style={sectionTitle}>API Data — Todos</h2>
-              <ApiHabits />
-            </section>
-          ) : (
-            <section style={sectionStyles}>
-              <h2 style={sectionTitle}>Completion History</h2>
-              <History logs={historyLogs} />
-            </section>
-          )}
-        </div>
-      </main>
-
-      <Footer stats={{ total: totalHabits, completed: completedToday }} />
-    </>
+        {/* Redirect from old-route to habits for example purposes */}
+        <Route path="/old-route" element={<Navigate to="/habits" replace />} />
+        
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
-
-/* ── Inline styles ── */
-
-const mainStyles = {
-  flex: 1,
-  padding: 'var(--spacing-lg) 0',
-  backgroundColor: 'var(--bg-main)',
-};
-
-const contentContainer = {
-  maxWidth: '800px',
-  margin: '0 auto',
-  padding: '0 var(--spacing-lg)',
-};
-
-const sectionStyles = {
-  marginBottom: '40px',
-};
-
-const sectionTitle = {
-  fontSize: '1.25rem',
-  fontWeight: '600',
-  color: 'var(--text-secondary)',
-  marginBottom: 'var(--spacing-md)',
-  borderLeft: '4px solid var(--primary)',
-  paddingLeft: 'var(--spacing-md)',
-};
-
-const filterHeaderStyles = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 'var(--spacing-md)',
-  paddingBottom: 'var(--spacing-sm)',
-  borderBottom: '1px solid var(--border)',
-};
-
-const filterGroupStyles = {
-  display: 'flex',
-  gap: '8px',
-  backgroundColor: 'var(--bg-card)',
-  padding: '4px',
-  borderRadius: 'var(--radius)',
-  border: '1px solid var(--border)',
-};
-
-const filterBtnStyles = {
-  background: 'transparent',
-  border: 'none',
-  padding: '6px 12px',
-  fontSize: '0.85rem',
-  fontWeight: '600',
-  color: 'var(--text-secondary)',
-  cursor: 'pointer',
-  borderRadius: 'var(--radius)',
-  transition: 'all 0.2s',
-};
-
-const activeFilterStyles = {
-  backgroundColor: 'var(--primary)',
-  color: 'white',
-  boxShadow: 'var(--shadow)',
-};
 
 export default App;

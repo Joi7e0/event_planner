@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const HabitCard = ({ habit, onToggle }) => {
     const isDone = habit.completed;
@@ -25,15 +26,26 @@ const HabitCard = ({ habit, onToggle }) => {
                     <span style={streakStyles}>🔥 {habit.streak} day streak</span>
                 </div>
             </div>
-            <span
-                style={{
-                    ...statusBadge,
-                    backgroundColor: isDone ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
-                    color: isDone ? 'var(--accent)' : 'var(--warning)',
-                }}
-            >
-                {isDone ? '✓ Done' : '⏳ Pending'}
-            </span>
+            
+            <div style={actionStyles}>
+                <span
+                    style={{
+                        ...statusBadge,
+                        backgroundColor: isDone ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
+                        color: isDone ? 'var(--accent)' : 'var(--warning)',
+                    }}
+                >
+                    {isDone ? '✓ Done' : '⏳ Pending'}
+                </span>
+                
+                <Link 
+                    to={`/habit/${habit.id}`} 
+                    style={readMoreStyle}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    Read More &rarr;
+                </Link>
+            </div>
         </div>
     );
 };
@@ -87,6 +99,13 @@ const streakStyles = {
     color: 'var(--text-secondary)',
 };
 
+const actionStyles = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    gap: '8px',
+};
+
 const statusBadge = {
     padding: '6px 16px',
     borderRadius: '20px',
@@ -95,6 +114,13 @@ const statusBadge = {
     whiteSpace: 'nowrap',
     minWidth: '100px',
     textAlign: 'center',
+};
+
+const readMoreStyle = {
+    fontSize: '0.8rem',
+    color: 'var(--primary)',
+    textDecoration: 'none',
+    fontWeight: '600',
 };
 
 export default HabitCard;
