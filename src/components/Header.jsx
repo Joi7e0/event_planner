@@ -1,8 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import '../styles/variables.css';
+import { useTheme } from '../context/ThemeContext';
+import { useSettings } from '../context/SettingsContext';
 
-const Header = ({ title, titleAccent, subtitle, completedCount, theme, toggleTheme }) => {
+const Header = ({ title, titleAccent, subtitle, completedCount }) => {
+    const { theme, toggleTheme } = useTheme();
+    const { t, language, changeLanguage, LANGUAGES } = useSettings();
+
     return (
         <header style={headerStyles}>
             <div style={containerStyles}>
@@ -13,35 +18,73 @@ const Header = ({ title, titleAccent, subtitle, completedCount, theme, toggleThe
                     <p style={subtitleStyles}>{subtitle}</p>
                 </div>
                 <div style={actionArea}>
-                    <div style={badgeContainer}>
-                        <span style={badgeLabel}>Today's Progress</span>
-                        <span style={badgeValue}>{completedCount} Done</span>
+                    {/* Language switcher */}
+                    <div style={langSwitcherStyles}>
+                        {Object.entries(LANGUAGES).map(([code, meta]) => (
+                            <button
+                                key={code}
+                                id={`lang-btn-${code}`}
+                                onClick={() => changeLanguage(code)}
+                                style={{
+                                    ...langBtnStyle,
+                                    backgroundColor: language === code
+                                        ? 'rgba(99, 102, 241, 0.2)'
+                                        : 'transparent',
+                                    color: language === code
+                                        ? 'var(--primary)'
+                                        : 'var(--text-secondary)',
+                                    borderColor: language === code
+                                        ? 'var(--primary)'
+                                        : 'var(--border)',
+                                }}
+                                aria-label={`Switch to ${meta.label}`}
+                                title={meta.label}
+                            >
+                                {meta.flag} {code.toUpperCase()}
+                            </button>
+                        ))}
                     </div>
+
+                    {/* Today's progress badge */}
+                    <div style={badgeContainer}>
+                        <span style={badgeLabel}>{t('todayProgress')}</span>
+                        <span style={badgeValue}>{completedCount} {t('done')}</span>
+                    </div>
+
+                    {/* Navigation */}
                     <nav>
                         <ul className="nav-list" style={navListStyles}>
                             <li>
                                 <NavLink to="/" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
-                                    Dashboard
+                                    {t('dashboard')}
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/habits" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
-                                    Habits
+                                    {t('habits')}
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/history" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
-                                    History
+                                    {t('history')}
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/about" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
-                                    ✨ Inspiration
+                                    {t('inspiration')}
                                 </NavLink>
                             </li>
                         </ul>
                     </nav>
-                    <button onClick={toggleTheme} style={themeToggleStyle} aria-label="Toggle Theme">
+
+                    {/* Theme toggle */}
+                    <button
+                        id="theme-toggle-btn"
+                        onClick={toggleTheme}
+                        style={themeToggleStyle}
+                        aria-label="Toggle Theme"
+                        title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+                    >
                         {theme === 'light' ? '🌙' : '☀️'}
                     </button>
                 </div>
@@ -54,6 +97,22 @@ const actionArea = {
     display: 'flex',
     alignItems: 'center',
     gap: 'var(--spacing-lg)',
+};
+
+const langSwitcherStyles = {
+    display: 'flex',
+    gap: '4px',
+};
+
+const langBtnStyle = {
+    border: '1px solid',
+    borderRadius: '6px',
+    padding: '3px 8px',
+    fontSize: '0.72rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'var(--transition)',
+    fontFamily: 'var(--font-main)',
 };
 
 const badgeContainer = {
@@ -87,7 +146,7 @@ const headerStyles = {
 };
 
 const containerStyles = {
-    maxWidth: '1000px',
+    maxWidth: '1200px',
     margin: '0 auto',
     padding: '0 var(--spacing-lg)',
     display: 'flex',
@@ -134,4 +193,3 @@ const themeToggleStyle = {
 };
 
 export default Header;
-

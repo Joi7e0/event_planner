@@ -2,17 +2,18 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import { useSettings } from '../context/SettingsContext';
 
-const Layout = ({ theme, toggleTheme, completedToday, totalHabits }) => {
+const Layout = ({ completedToday, totalHabits }) => {
+  const { t } = useSettings();
+
   return (
     <>
       <Header
         title="Habit"
         titleAccent="Tracker"
-        subtitle="Build better habits every day"
+        subtitle={t('buildBetter')}
         completedCount={completedToday}
-        theme={theme}
-        toggleTheme={toggleTheme}
       />
       <main style={mainStyles}>
         <div style={contentContainer}>

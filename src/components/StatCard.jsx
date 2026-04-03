@@ -1,11 +1,23 @@
 import React from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 const StatCard = ({ label, value, icon }) => {
+    const { theme } = useTheme();
+
     return (
-        <div style={cardStyles}>
+        <div style={{
+            ...cardStyles,
+            boxShadow: theme === 'dark'
+                ? '0 4px 20px rgba(0,0,0,0.4)'
+                : '0 2px 12px rgba(0,0,0,0.07)',
+            borderTop: `2px solid var(--primary)`,
+        }}>
             <span style={iconStyles}>{icon}</span>
             <span style={labelStyles}>{label}</span>
-            <span style={valueStyles}>{value}</span>
+            <span style={{
+                ...valueStyles,
+                color: theme === 'dark' ? 'var(--text-primary)' : 'var(--primary)',
+            }}>{value}</span>
         </div>
     );
 };
@@ -19,7 +31,6 @@ const cardStyles = {
     flexDirection: 'column',
     alignItems: 'center',
     gap: '6px',
-    boxShadow: 'var(--shadow)',
     transition: 'var(--transition)',
 };
 
@@ -37,7 +48,6 @@ const labelStyles = {
 const valueStyles = {
     fontSize: '1.5rem',
     fontWeight: '700',
-    color: 'var(--text-primary)',
 };
 
 export default StatCard;

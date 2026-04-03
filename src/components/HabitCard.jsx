@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 const HabitCard = ({ habit, onToggle }) => {
     const isDone = habit.completed;
+    const { theme } = useTheme();
 
     return (
         <div
@@ -10,6 +12,9 @@ const HabitCard = ({ habit, onToggle }) => {
                 ...cardStyles,
                 opacity: isDone ? 0.8 : 1,
                 borderLeft: isDone ? '4px solid var(--accent)' : '4px solid var(--warning)',
+                boxShadow: theme === 'dark'
+                    ? '0 4px 16px rgba(0,0,0,0.35)'
+                    : '0 2px 10px rgba(0,0,0,0.08)',
             }}
             onClick={() => onToggle(habit.id)}
         >

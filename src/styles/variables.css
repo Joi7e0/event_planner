@@ -26,6 +26,26 @@
   --transition: all 0.3s ease;
 }
 
+/* ── Smooth theme transition (bonus) ── */
+html {
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease;
+}
+
+body,
+header,
+footer,
+[class*="card"],
+[style*="var(--bg"],
+[style*="var(--text"] {
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
 [data-theme='light'] {
   --primary: #4f46e5;
   --primary-hover: #4338ca;

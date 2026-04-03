@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from './context/ThemeContext.jsx';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Layout
@@ -59,18 +60,7 @@ function App() {
     return INITIAL_HISTORY_LOGS;
   });
   const [filterMode, setFilterMode] = useState('all'); // 'all', 'active', 'completed'
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme-preference') || 'dark';
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme-preference', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
+  const { theme } = useTheme();
 
   useEffect(() => {
     localStorage.setItem('habits-data', JSON.stringify(habits));
@@ -115,11 +105,9 @@ function App() {
   return (
     <Routes>
       <Route element={
-        <Layout 
-          theme={theme} 
-          toggleTheme={toggleTheme} 
-          completedToday={completedToday} 
-          totalHabits={totalHabits} 
+        <Layout
+          completedToday={completedToday}
+          totalHabits={totalHabits}
         />
       }>
         <Route path="/" element={<Dashboard statsData={statsData} historyLogs={historyLogs} />} />
