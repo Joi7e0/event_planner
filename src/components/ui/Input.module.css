@@ -1,0 +1,84 @@
+/* ═══════════════════════════════════════════
+   Input Component — CSS Module
+   States: default · focus · disabled · error
+   ═══════════════════════════════════════════ */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* ── Label ── */
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  transition: color 0.2s ease;
+}
+
+.wrapper:focus-within .label {
+  color: var(--color-border-focus);
+}
+
+/* ── Input field ── */
+.input {
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  background-color: var(--color-bg-input);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.35s ease;
+  min-height: 38px;
+  appearance: none;
+}
+
+.input::placeholder {
+  color: var(--color-text-disabled);
+}
+
+/* Focus state — visually distinct */
+.input:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: var(--shadow-focus);
+  background-color: var(--color-bg-card);
+}
+
+/* Disabled state */
+.input:disabled,
+.input.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+/* Error state */
+.inputError {
+  border-color: var(--color-danger);
+}
+.inputError:focus {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-subtle);
+}
+
+/* ── Error message ── */
+.errorMsg {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  margin-top: 2px;
+}
+
+/* ── Hint text ── */
+.hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-disabled);
+}

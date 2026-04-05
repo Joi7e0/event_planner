@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSettings } from '../context/SettingsContext';
 
 /* ── ApiHabits ──────────────────────────────────────────────────────────────
    Fetches motivational quotes from Quotable API and renders them as
@@ -11,6 +12,7 @@ const ApiHabits = () => {
   const [quotes, setQuotes]   = useState([]);
   const [status, setStatus]   = useState('loading'); // 'loading' | 'error' | 'success'
   const [errorMsg, setErrorMsg] = useState('');
+  const { t } = useSettings();
 
   useEffect(() => {
     const fetchQuotes = async () => {
@@ -37,7 +39,7 @@ const ApiHabits = () => {
     return (
       <div style={stateWrapperStyles}>
         <div style={spinnerStyles} aria-label="Loading quotes" />
-        <p style={stateTextStyles}>Fetching inspiration…</p>
+        <p style={stateTextStyles}>{t('fetchingInspiration')}</p>
       </div>
     );
   }
@@ -48,7 +50,7 @@ const ApiHabits = () => {
       <div style={{ ...stateWrapperStyles, ...errorWrapperStyles }}>
         <span style={errorIconStyles}>⚠️</span>
         <p style={{ ...stateTextStyles, color: 'var(--warning)' }}>
-          Could not load quotes
+          {t('couldNotLoad')}
         </p>
         <p style={errorDetailStyles}>{errorMsg}</p>
       </div>

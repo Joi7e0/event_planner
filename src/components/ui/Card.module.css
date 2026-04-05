@@ -1,0 +1,75 @@
+/* ═══════════════════════════════════════════
+   Card Component — CSS Module
+   Zones: body · footer
+   ═══════════════════════════════════════════ */
+
+.card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Header zone (optional) ── */
+.header {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: border-color 0.35s ease;
+}
+
+/* ── Body zone ── */
+.body {
+  padding: var(--space-5);
+  flex: 1;
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+/* ── Footer zone ── */
+.footer {
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--color-border);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  transition: border-color 0.35s ease;
+}
+
+/* ── Elevation variants ── */
+.flat {
+  box-shadow: none;
+}
+.flat:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.raised {
+  box-shadow: var(--shadow-md);
+}
+.raised:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.35s ease;
+}

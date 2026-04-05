@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from './context/ThemeContext.jsx';
+import { useSettings } from './context/SettingsContext.jsx';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Layout
@@ -61,6 +62,7 @@ function App() {
   });
   const [filterMode, setFilterMode] = useState('all'); // 'all', 'active', 'completed'
   const { theme } = useTheme();
+  const { t } = useSettings();
 
   useEffect(() => {
     localStorage.setItem('habits-data', JSON.stringify(habits));
@@ -89,10 +91,10 @@ function App() {
   const bestStreak = habits.length > 0 ? Math.max(...habits.map((h) => h.streak)) : 0;
 
   const statsData = [
-    { id: 's1', label: 'Completed Today', value: `${completedToday} / ${totalHabits}`, icon: '✅' },
-    { id: 's2', label: 'Best Streak', value: `${bestStreak} Days`, icon: '🔥' },
-    { id: 's3', label: 'Total Logged', value: `${historyLogs.length}`, icon: '🏆' },
-    { id: 's4', label: 'Overall Progress', value: `${totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0}%`, icon: '📊' },
+    { id: 's1', label: t('completedToday'), value: `${completedToday} / ${totalHabits}`, icon: '✅' },
+    { id: 's2', label: t('bestStreak'), value: `${bestStreak} ${t('days')}`, icon: '🔥' },
+    { id: 's3', label: t('totalLogged'), value: `${historyLogs.length}`, icon: '🏆' },
+    { id: 's4', label: t('overallProgress'), value: `${totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0}%`, icon: '📊' },
   ];
 
   /* ── Filtered data ── */

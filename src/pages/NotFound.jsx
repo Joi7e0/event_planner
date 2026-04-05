@@ -1,14 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 const NotFound = () => {
+  const { t } = useSettings();
+
   return (
     <div style={containerStyle}>
       <h1 style={titleStyle}>404</h1>
-      <h2 style={subtitleStyle}>Page Not Found</h2>
-      <p style={descStyle}>The page you are looking for doesn't exist or has been moved.</p>
+      <h2 style={subtitleStyle}>{t('pageNotFound')}</h2>
+      <p style={descStyle}>{t('pageNotFoundDesc')}</p>
       <Link to="/" style={linkStyle}>
-        Return to Dashboard
+        {t('returnToDashboard')}
       </Link>
     </div>
   );
@@ -21,7 +24,7 @@ const containerStyle = {
   justifyContent: 'center',
   minHeight: '40vh',
   textAlign: 'center',
-  padding: 'var(--spacing-xl)'
+  padding: 'var(--spacing-xl)',
 };
 
 const titleStyle = {
@@ -29,19 +32,19 @@ const titleStyle = {
   color: 'var(--primary)',
   fontWeight: '800',
   lineHeight: 1,
-  marginBottom: 'var(--spacing-md)'
+  marginBottom: 'var(--spacing-md)',
 };
 
 const subtitleStyle = {
   fontSize: '2rem',
   color: 'var(--text-primary)',
-  marginBottom: 'var(--spacing-sm)'
+  marginBottom: 'var(--spacing-sm)',
 };
 
 const descStyle = {
   color: 'var(--text-secondary)',
   fontSize: '1.1rem',
-  marginBottom: 'var(--spacing-xl)'
+  marginBottom: 'var(--spacing-xl)',
 };
 
 const linkStyle = {
@@ -51,7 +54,7 @@ const linkStyle = {
   textDecoration: 'none',
   borderRadius: 'var(--radius)',
   fontWeight: '600',
-  transition: 'opacity 0.2s'
+  transition: 'opacity 0.2s',
 };
 
 export default NotFound;

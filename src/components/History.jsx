@@ -1,11 +1,14 @@
 import React from 'react';
 import HistoryItem from './HistoryItem';
+import { useSettings } from '../context/SettingsContext';
 
 const History = ({ logs }) => {
+    const { t } = useSettings();
+
     if (logs.length === 0) {
         return (
             <div style={emptyStyles}>
-                <p>Your history is empty. Complete your first habit to see it here! 🎯</p>
+                <p>{t('emptyHistory')}</p>
             </div>
         );
     }

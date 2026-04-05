@@ -1,0 +1,161 @@
+/* ═══════════════════════════════════════════════════════
+   Design Tokens — Habit Tracker
+   Covers: colors, typography, spacing, border-radius
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Default (dark) theme tokens ── */
+:root {
+  /* ── Colors: Brand ── */
+  --color-primary:        #6366f1;
+  --color-primary-hover:  #4f46e5;
+  --color-primary-active: #4338ca;
+  --color-primary-subtle: rgba(99, 102, 241, 0.15);
+
+  --color-secondary:        #8b5cf6;
+  --color-secondary-hover:  #7c3aed;
+
+  --color-danger:        #ef4444;
+  --color-danger-hover:  #dc2626;
+  --color-danger-subtle: rgba(239, 68, 68, 0.15);
+
+  --color-success:        #10b981;
+  --color-success-hover:  #059669;
+  --color-success-subtle: rgba(16, 185, 129, 0.15);
+
+  --color-warning:        #eab308;
+  --color-warning-subtle: rgba(234, 179, 8, 0.15);
+
+  /* ── Colors: Surfaces ── */
+  --color-bg:         #0f172a;
+  --color-bg-card:    #1e293b;
+  --color-bg-input:   #0f172a;
+  --color-bg-overlay: rgba(15, 23, 42, 0.85);
+
+  /* ── Colors: Text ── */
+  --color-text:          #f8fafc;
+  --color-text-secondary:#94a3b8;
+  --color-text-disabled: #475569;
+  --color-text-on-brand: #ffffff;
+
+  /* ── Colors: Borders ── */
+  --color-border:       #334155;
+  --color-border-focus: #6366f1;
+
+  /* ── Colors: Shadows ── */
+  --color-shadow: rgba(0, 0, 0, 0.4);
+
+  /* ── Typography ── */
+  --font-family:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-xs:   0.75rem;   /* 12px */
+  --font-size-sm:   0.875rem;  /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-md:   1.125rem;  /* 18px */
+  --font-size-lg:   1.25rem;   /* 20px */
+  --font-size-xl:   1.5rem;    /* 24px */
+  --font-size-2xl:  2rem;      /* 32px */
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --line-height-tight:  1.25;
+  --line-height-normal: 1.5;
+  --line-height-loose:  1.75;
+
+  /* ── Spacing ── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ── Border Radius ── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.4);
+
+  /* ── Transitions ── */
+  --transition-fast:   all 0.15s ease;
+  --transition-normal: all 0.25s ease;
+  --transition-slow:   all 0.4s ease;
+
+  /* ── Semantic aliases (used across components) ── */
+  --bg-main:       var(--color-bg);
+  --bg-card:       var(--color-bg-card);
+  --text-primary:  var(--color-text);
+  --text-secondary:var(--color-text-secondary);
+  --primary:       var(--color-primary);
+  --primary-hover: var(--color-primary-hover);
+  --danger:        var(--color-danger);
+  --accent:        var(--color-success);
+  --warning:       var(--color-warning);
+  --border:        var(--color-border);
+  --shadow:        var(--shadow-md);
+  --radius:        var(--radius-lg);
+  --spacing-sm:    var(--space-2);
+  --spacing-md:    var(--space-4);
+  --spacing-lg:    var(--space-6);
+  --font-main:     var(--font-family);
+  --transition:    var(--transition-normal);
+}
+
+/* ── Light theme overrides ── */
+[data-theme="light"] {
+  /* Colors: Brand */
+  --color-primary:        #4f46e5;
+  --color-primary-hover:  #4338ca;
+  --color-primary-active: #3730a3;
+  --color-primary-subtle: rgba(79, 70, 229, 0.12);
+
+  --color-secondary:       #7c3aed;
+  --color-secondary-hover: #6d28d9;
+
+  --color-danger:        #dc2626;
+  --color-danger-hover:  #b91c1c;
+  --color-danger-subtle: rgba(220, 38, 38, 0.12);
+
+  --color-success:        #059669;
+  --color-success-hover:  #047857;
+  --color-success-subtle: rgba(5, 150, 105, 0.12);
+
+  --color-warning:        #d97706;
+  --color-warning-subtle: rgba(217, 119, 6, 0.12);
+
+  /* Colors: Surfaces */
+  --color-bg:         #f1f5f9;
+  --color-bg-card:    #ffffff;
+  --color-bg-input:   #f8fafc;
+  --color-bg-overlay: rgba(241, 245, 249, 0.92);
+
+  /* Colors: Text */
+  --color-text:          #0f172a;
+  --color-text-secondary:#475569;
+  --color-text-disabled: #94a3b8;
+  --color-text-on-brand: #ffffff;
+
+  /* Colors: Borders */
+  --color-border:       #e2e8f0;
+  --color-border-focus: #4f46e5;
+
+  /* Colors: Shadows */
+  --color-shadow: rgba(15, 23, 42, 0.1);
+
+  /* Shadows (lighter for light theme) */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08);
+  --shadow-focus: 0 0 0 3px rgba(79, 70, 229, 0.35);
+}

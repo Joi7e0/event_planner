@@ -1,13 +1,16 @@
 import React from 'react';
+import { useSettings } from '../context/SettingsContext';
 
 const HistoryItem = ({ log }) => {
+    const { t } = useSettings();
+
     return (
         <div style={itemStyles}>
             <div style={logInfo}>
                 <span style={habitNameStyles}>{log.habitName}</span>
-                <span style={logMeta}>{log.date} at {log.time}</span>
+                <span style={logMeta}>{log.date} {t('at')} {log.time}</span>
             </div>
-            <span style={statusBadge}>Completed</span>
+            <span style={statusBadge}>{t('completedBadge')}</span>
         </div>
     );
 };

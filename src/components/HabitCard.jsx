@@ -1,75 +1,83 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { useSettings } from '../context/SettingsContext';
+import { Card, Button } from './ui';
 
 const HabitCard = ({ habit, onToggle }) => {
     const isDone = habit.completed;
     const { theme } = useTheme();
+    const { t } = useSettings();
+
+    const cardFooter = (
+        <>
+            <span
+                style={{
+                    ...statusBadge,
+                    backgroundColor: isDone
+                        ? 'var(--color-success-subtle)'
+                        : 'var(--color-warning-subtle)',
+                    color: isDone ? 'var(--color-success)' : 'var(--color-warning)',
+                }}
+            >
+                {isDone ? t('statusDone') : t('statusPending')}
+            </span>
+
+            <Link
+                to={`/habit/${habit.id}`}
+                style={readMoreStyle}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <Button variant="secondary" size="sm">
+                    {t('readMore')}
+                </Button>
+            </Link>
+        </>
+    );
 
     return (
-        <div
+        <Card
+            footer={cardFooter}
             style={{
-                ...cardStyles,
-                opacity: isDone ? 0.8 : 1,
-                borderLeft: isDone ? '4px solid var(--accent)' : '4px solid var(--warning)',
+                opacity: isDone ? 0.85 : 1,
+                borderLeft: isDone
+                    ? '4px solid var(--color-success)'
+                    : '4px solid var(--color-warning)',
                 boxShadow: theme === 'dark'
                     ? '0 4px 16px rgba(0,0,0,0.35)'
                     : '0 2px 10px rgba(0,0,0,0.08)',
+                cursor: 'pointer',
+                userSelect: 'none',
+                marginBottom: 'var(--spacing-md)',
+                transition: 'var(--transition)',
             }}
             onClick={() => onToggle(habit.id)}
         >
+            {/* ── Card body content ── */}
             <div style={infoStyles}>
-                <h3 style={{
-                    ...titleStyles,
-                    textDecoration: isDone ? 'line-through' : 'none',
-                    color: isDone ? 'var(--text-secondary)' : 'var(--text-primary)',
-                }}>
+                <h3
+                    style={{
+                        ...titleStyles,
+                        textDecoration: isDone ? 'line-through' : 'none',
+                        color: isDone
+                            ? 'var(--color-text-secondary)'
+                            : 'var(--color-text)',
+                    }}
+                >
                     {habit.name}
                 </h3>
                 <div style={metaRow}>
                     <span style={categoryBadge}>{habit.category}</span>
-                    <span style={streakStyles}>🔥 {habit.streak} day streak</span>
+                    <span style={streakStyles}>
+                        🔥 {habit.streak} {t('dayStreak')}
+                    </span>
                 </div>
             </div>
-            
-            <div style={actionStyles}>
-                <span
-                    style={{
-                        ...statusBadge,
-                        backgroundColor: isDone ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
-                        color: isDone ? 'var(--accent)' : 'var(--warning)',
-                    }}
-                >
-                    {isDone ? '✓ Done' : '⏳ Pending'}
-                </span>
-                
-                <Link 
-                    to={`/habit/${habit.id}`} 
-                    style={readMoreStyle}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    Read More &rarr;
-                </Link>
-            </div>
-        </div>
+        </Card>
     );
 };
 
-const cardStyles = {
-    backgroundColor: 'var(--bg-card)',
-    padding: 'var(--spacing-md)',
-    borderRadius: 'var(--radius)',
-    border: '1px solid var(--border)',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 'var(--spacing-md)',
-    transition: 'var(--transition)',
-    boxShadow: 'var(--shadow)',
-    cursor: 'pointer',
-    userSelect: 'none',
-};
-
+/* ── Styles ── */
 const infoStyles = {
     display: 'flex',
     flexDirection: 'column',
@@ -79,53 +87,42 @@ const infoStyles = {
 const titleStyles = {
     fontSize: '1.1rem',
     fontWeight: '600',
-    color: 'var(--text-primary)',
 };
 
 const metaRow = {
     display: 'flex',
-    gap: 'var(--spacing-sm)',
+    gap: 'var(--space-2)',
     alignItems: 'center',
 };
 
 const categoryBadge = {
-    fontSize: '0.75rem',
-    fontWeight: '600',
+    fontSize: 'var(--font-size-xs)',
+    fontWeight: 'var(--font-weight-bold)',
     textTransform: 'uppercase',
     letterSpacing: '0.03em',
     padding: '2px 10px',
-    borderRadius: '10px',
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
-    color: 'var(--primary)',
+    borderRadius: 'var(--radius-full)',
+    backgroundColor: 'var(--color-primary-subtle)',
+    color: 'var(--color-primary)',
 };
 
 const streakStyles = {
-    fontSize: '0.85rem',
-    color: 'var(--text-secondary)',
-};
-
-const actionStyles = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    gap: '8px',
+    fontSize: 'var(--font-size-sm)',
+    color: 'var(--color-text-secondary)',
 };
 
 const statusBadge = {
-    padding: '6px 16px',
-    borderRadius: '20px',
-    fontSize: '0.8rem',
-    fontWeight: '700',
+    padding: '4px 14px',
+    borderRadius: 'var(--radius-full)',
+    fontSize: 'var(--font-size-xs)',
+    fontWeight: 'var(--font-weight-bold)',
     whiteSpace: 'nowrap',
-    minWidth: '100px',
+    minWidth: '90px',
     textAlign: 'center',
 };
 
 const readMoreStyle = {
-    fontSize: '0.8rem',
-    color: 'var(--primary)',
     textDecoration: 'none',
-    fontWeight: '600',
 };
 
 export default HabitCard;
